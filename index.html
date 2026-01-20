@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Social Pattarai | Premium Personal Branding Agency</title>
+    <!-- External Dependencies -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <script>
+        // Define handleVideoError early to prevent ReferenceError on load
+        function handleVideoError(video) {
+            const container = video.closest('.video-card');
+            if (!container) return;
+            video.style.display = 'none';
+            const msg = document.createElement('div');
+            msg.className = 'absolute inset-0 flex items-center justify-center text-[10px] text-gray-600 px-4 text-center';
+            msg.innerHTML = `Video source "${video.getAttribute('src')}" not found locally.`;
+            container.appendChild(msg);
+        }
+    </script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+
+        :root {
+            --accent: #a855f7; /* Electric Purple */
+            --accent-gradient: linear-gradient(135deg, #a855f7 0%, #6366f1 100%);
+            --bg-dark: #050505;
+            --card-bg: rgba(255, 255, 255, 0.03);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: white;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* Interactive Background Canvas */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at center, #0f0a1a 0%, #000 100%);
+        }
+
+        /* Glassmorphism */
+        .glass {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .glass:hover {
+            border-color: var(--accent);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.2);
+        }
+
+        /* Standout Buttons with Subtle Glow */
+        .btn-premium {
+            background: var(--accent-gradient);
+            transition: all 0.3s ease;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.1);
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-premium:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 25px rgba(168, 85, 247, 0.5);
+            filter: brightness(1.1);
+        }
+
+        /* Text reveal animations */
+        .reveal-text {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .reveal-text.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .glow-text {
+            text-shadow: 0 0 25px rgba(168, 85, 247, 0.5);
+        }
+
+        /* Nav Interactions */
+        .nav-link {
+            position: relative;
+            padding-bottom: 4px;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-gradient);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-link:hover {
+            color: var(--accent);
+        }
+
+        .custom-cursor {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--accent);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s ease;
+            display: none;
+        }
+
+        @media (min-width: 1024px) {
+            .custom-cursor { display: block; }
+        }
+
+        input, textarea {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, textarea:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 10px rgba(168, 85, 247, 0.2);
+        }
+
+        .video-card {
+            aspect-ratio: 9/16;
+            overflow: hidden;
+            position: relative;
+            background: #111;
+            border-radius: 16px;
+            cursor: pointer;
+        }
+
+        .video-card video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .play-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.3);
+            transition: opacity 0.3s ease;
+            z-index: 10;
+        }
+
+        .play-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .slogan-fit {
+            font-size: clamp(3rem, 12vw, 14vw);
+            line-height: 1;
+            letter-spacing: -0.05em;
+            text-transform: uppercase;
+            font-weight: 900;
+            color: rgba(168, 85, 247, 0.15);
+            user-select: none;
+            pointer-events: none;
+            width: 100%;
+            text-align: center;
+        }
+
+        /* Mobile Menu Transitions */
+        #mobile-menu {
+            transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            transform: translateX(100%);
+        }
+        #mobile-menu.active {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div id="cursor" class="custom-cursor"></div>
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 px-4 md:px-10 py-4 flex justify-between items-center bg-black/60 backdrop-blur-xl border-b border-white/5">
+        <div class="text-lg md:text-xl font-extrabold tracking-tighter text-purple-500">
+            THE SOCIAL <span class="text-white font-light">PATTARAI</span>
+        </div>
+        
+        <!-- Desktop Nav -->
+        <div class="hidden md:flex space-x-8 text-sm font-medium items-center">
+            <a href="#home" class="nav-link">Home</a>
+            <a href="#portfolio" class="nav-link">Portfolio</a>
+            <a href="#services" class="nav-link">Services</a>
+            <a href="#contact" class="btn-premium px-6 py-2.5 text-white rounded-full font-bold">Contact Us</a>
+        </div>
+
+        <!-- Mobile Toggle -->
+        <button onclick="toggleMobileMenu()" class="md:hidden text-white text-2xl focus:outline-none">
+            <i class="fas fa-bars"></i>
+        </button>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="fixed inset-0 z-[60] bg-black/95 backdrop-blur-2xl flex flex-col items-center justify-center space-y-8 text-2xl font-bold">
+        <button onclick="toggleMobileMenu()" class="absolute top-6 right-6 text-white text-3xl">
+            <i class="fas fa-times"></i>
+        </button>
+        <a href="#home" onclick="toggleMobileMenu()" class="hover:text-purple-500 transition">Home</a>
+        <a href="#portfolio" onclick="toggleMobileMenu()" class="hover:text-purple-500 transition">Portfolio</a>
+        <a href="#services" onclick="toggleMobileMenu()" class="hover:text-purple-500 transition">Services</a>
+        <a href="#contact" onclick="toggleMobileMenu()" class="px-10 py-3 bg-purple-600 rounded-full text-lg">Contact Us</a>
+    </div>
+
+    <!-- Hero Section -->
+    <section id="home" class="min-h-screen flex flex-col items-center justify-center pt-28 pb-12 px-6 text-center">
+        <div class="max-w-5xl">
+            <span class="reveal-text inline-block px-4 py-1 mb-6 text-[10px] md:text-xs font-bold uppercase tracking-widest border border-purple-500/30 text-purple-400 rounded-full">
+                Personal Branding Reimagined
+            </span>
+            <h1 class="reveal-text text-4xl sm:text-5xl md:text-8xl font-extrabold mb-6 md:mb-8 leading-tight">
+                Build a Brand That <span class="text-purple-500 glow-text">Speaks Before You</span>
+            </h1>
+            <p class="reveal-text text-base md:text-xl text-gray-400 mb-10 max-w-2xl mx-auto font-light" style="transition-delay: 0.2s;">
+                We forge high-impact identities for founders and leaders who want to command authority without sacrificing their time.
+            </p>
+
+            <!-- Achievement Stats Row -->
+            <div class="reveal-text flex flex-row flex-wrap justify-center gap-6 md:gap-24 mb-12" style="transition-delay: 0.3s;">
+                <div class="stat-card text-center flex-1 min-w-[120px]">
+                    <div class="text-2xl md:text-4xl font-extrabold text-white"><span class="count-up" data-target="15">0</span>+</div>
+                    <div class="text-[9px] md:text-xs uppercase tracking-widest text-gray-500 font-bold mt-2">Clients</div>
+                </div>
+                <div class="stat-card text-center flex-1 min-w-[120px]">
+                    <div class="text-2xl md:text-4xl font-extrabold text-white"><span class="count-up" data-target="2">0</span>M+</div>
+                    <div class="text-[9px] md:text-xs uppercase tracking-widest text-gray-500 font-bold mt-2 whitespace-nowrap">Views Generated</div>
+                </div>
+                <div class="stat-card text-center flex-1 min-w-[120px]">
+                    <div class="text-2xl md:text-4xl font-extrabold text-white"><span class="count-up" data-target="100">0</span>%</div>
+                    <div class="text-[9px] md:text-xs uppercase tracking-widest text-gray-500 font-bold mt-2">Satisfaction</div>
+                </div>
+            </div>
+
+            <div class="reveal-text flex flex-col sm:flex-row items-center justify-center gap-4 md:gap-6" style="transition-delay: 0.4s;">
+                <a href="#portfolio" class="btn-premium w-full sm:w-auto px-10 py-4 text-white font-bold rounded-xl">Explore Work</a>
+                <a href="#contact" class="glass w-full sm:w-auto px-10 py-4 font-bold rounded-xl border border-white/10 hover:bg-white/5">Book a Call</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section id="portfolio" class="py-20 md:py-32 px-4 md:px-10 max-w-7xl mx-auto">
+        <div class="mb-12 md:mb-16 text-center px-4">
+            <h2 class="reveal-text text-3xl md:text-4xl font-bold mb-4">Our <span class="text-purple-500">Masterpieces</span></h2>
+            <p class="reveal-text text-sm md:text-base text-gray-400">Cinematic content that builds trust and drives growth.</p>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-8">
+            <!-- Video Portfolio Items -->
+            <div class="reveal-text video-card glass group" onclick="toggleVideo(this)">
+                <video src="https://res.cloudinary.com/dadzvwbi6/video/upload/v1768847212/video_01_bkiivv.mp4" loop muted playsinline onerror="handleVideoError(this)"></video>
+                <div class="play-overlay">
+                    <i class="fas fa-play text-purple-500 text-xl md:text-3xl"></i>
+                </div>
+            </div>
+            <div class="reveal-text video-card glass group" onclick="toggleVideo(this)">
+                <video src="https://res.cloudinary.com/dadzvwbi6/video/upload/v1768847213/video_02_rvdw8q.mp4" loop muted playsinline onerror="handleVideoError(this)"></video>
+                <div class="play-overlay">
+                    <i class="fas fa-play text-purple-500 text-xl md:text-3xl"></i>
+                </div>
+            </div>
+            <div class="reveal-text video-card glass group" onclick="toggleVideo(this)">
+                <video src="https://res.cloudinary.com/dadzvwbi6/video/upload/v1768847211/video_05_qyuxrh.mp4" loop muted playsinline onerror="handleVideoError(this)"></video>
+                <div class="play-overlay">
+                    <i class="fas fa-play text-purple-500 text-xl md:text-3xl"></i>
+                </div>
+            </div>
+            <div class="reveal-text video-card glass group" onclick="toggleVideo(this)">
+                <video src="https://res.cloudinary.com/dadzvwbi6/video/upload/v1768847216/video_04_clgib3.mp4" loop muted playsinline onerror="handleVideoError(this)"></video>
+                <div class="play-overlay">
+                    <i class="fas fa-play text-purple-500 text-xl md:text-3xl"></i>
+                </div>
+            </div>
+            <div class="reveal-text video-card glass group" onclick="toggleVideo(this)">
+                <video src="https://res.cloudinary.com/dadzvwbi6/video/upload/v1768847220/video_03_wgk1wa.mp4" loop muted playsinline onerror="handleVideoError(this)"></video>
+                <div class="play-overlay">
+                    <i class="fas fa-play text-purple-500 text-xl md:text-3xl"></i>
+                </div>
+            </div>
+            <div class="reveal-text video-card glass group" onclick="toggleVideo(this)">
+                <video src="video_06.mp4" loop muted playsinline onerror="handleVideoError(this)"></video>
+                <div class="play-overlay">
+                    <i class="fas fa-play text-purple-500 text-xl md:text-3xl"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-20 md:py-32 bg-black/40 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-12 md:mb-16">
+                <h2 class="reveal-text text-3xl md:text-4xl font-bold mb-4">Our <span class="text-purple-500">Expertise</span></h2>
+                <p class="reveal-text text-sm md:text-base text-gray-400">A full-stack system designed to systemize your influence.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="reveal-text flex flex-col gap-4 p-8 glass rounded-2xl">
+                    <div class="w-12 h-12 bg-purple-500/10 rounded-lg flex items-center justify-center text-purple-400"><i class="fas fa-chess-queen text-lg"></i></div>
+                    <h3 class="font-bold text-xl">Strategic Planning</h3>
+                    <p class="text-sm text-gray-400">Custom growth roadmap aligned with your business goals and persona.</p>
+                </div>
+                <div class="reveal-text flex flex-col gap-4 p-8 glass rounded-2xl">
+                    <div class="w-12 h-12 bg-purple-500/10 rounded-lg flex items-center justify-center text-purple-400"><i class="fas fa-video text-lg"></i></div>
+                    <h3 class="font-bold text-xl">Premium Production</h3>
+                    <p class="text-sm text-gray-400">High-end video editing and visual storytelling for maximum engagement.</p>
+                </div>
+                <div class="reveal-text flex flex-col gap-4 p-8 glass rounded-2xl">
+                    <div class="w-12 h-12 bg-purple-500/10 rounded-lg flex items-center justify-center text-purple-400"><i class="fas fa-shield-alt text-lg"></i></div>
+                    <h3 class="font-bold text-xl">Reputation Management</h3>
+                    <p class="text-sm text-gray-400">Protecting and enhancing your brand's authority across digital spaces.</p>
+                </div>
+                <div class="reveal-text flex flex-col gap-4 p-8 glass rounded-2xl">
+                    <div class="w-12 h-12 bg-purple-500/10 rounded-lg flex items-center justify-center text-purple-400"><i class="fas fa-rocket text-lg"></i></div>
+                    <h3 class="font-bold text-xl">Growth Automation</h3>
+                    <p class="text-sm text-gray-400">Automated lead gen and content distribution to save you hours weekly.</p>
+                </div>
+                <div class="reveal-text flex flex-col gap-4 p-8 glass rounded-2xl">
+                    <div class="w-12 h-12 bg-purple-500/10 rounded-lg flex items-center justify-center text-purple-400"><i class="fas fa-user-cog text-lg"></i></div>
+                    <h3 class="font-bold text-xl">Account Management</h3>
+                    <p class="text-sm text-gray-400">Total handling of your profiles—posting, optimization, and analytics.</p>
+                </div>
+                <div class="reveal-text flex flex-col gap-4 p-8 glass rounded-2xl">
+                    <div class="w-12 h-12 bg-purple-500/10 rounded-lg flex items-center justify-center text-purple-400"><i class="fas fa-users text-lg"></i></div>
+                    <h3 class="font-bold text-xl">Community Building</h3>
+                    <p class="text-sm text-gray-400">Turning followers into loyal advocates through strategic engagement.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us (The Advantage) -->
+    <section class="py-20 md:py-32 px-6 max-w-7xl mx-auto">
+        <div class="text-center mb-12 md:mb-16">
+            <h2 class="reveal-text text-3xl md:text-4xl font-bold mb-4">The <span class="text-purple-500">Pattarai</span> Advantage</h2>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+            <div class="reveal-text p-8 glass rounded-3xl">
+                <div class="text-purple-400 mb-4 text-2xl"><i class="fas fa-clock"></i></div>
+                <h3 class="text-xl font-bold mb-2">Minimal Time Investment</h3>
+                <p class="text-gray-400 text-sm">Our streamlined process requires as little as 3 hours of your time each month.</p>
+            </div>
+            <div class="reveal-text p-8 glass rounded-3xl">
+                <div class="text-purple-400 mb-4 text-2xl"><i class="fas fa-crown"></i></div>
+                <h3 class="text-xl font-bold mb-2">Luxury Aesthetics</h3>
+                <p class="text-gray-400 text-sm">We provide cinematic visuals that separate you from the noise of cheap content.</p>
+            </div>
+            <div class="reveal-text p-8 glass rounded-3xl">
+                <div class="text-purple-400 mb-4 text-2xl"><i class="fas fa-chart-line"></i></div>
+                <h3 class="text-xl font-bold mb-2">Algorithm Experts</h3>
+                <p class="text-gray-400 text-sm">We don't follow trends; we understand the psychology behind virality.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 md:py-32 px-6 bg-gradient-to-b from-transparent to-black">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
+                <div class="flex flex-col h-full text-center lg:text-left">
+                    <h2 class="reveal-text text-4xl md:text-6xl font-extrabold mb-8 leading-tight">Ready to Forge <br>Your <span class="text-purple-500">Brand?</span></h2>
+                    <p class="reveal-text text-sm md:text-base text-gray-400 mb-10">Mayilduthurai's first dedicated Personal Branding company. Let's discuss how we can scale your influence together.</p>
+                    
+                    <div class="reveal-text space-y-6 mb-12 flex flex-col items-center lg:items-start">
+                        <a href="tel:+919791808992" class="flex items-center gap-4 hover:text-purple-400 transition group text-sm md:text-base">
+                            <i class="fas fa-phone-alt text-purple-500 group-hover:scale-110 transition"></i> +91 9791808992
+                        </a>
+                        <a href="mailto:thesocialpattarai@gmail.com" class="flex items-center gap-4 hover:text-purple-400 transition group text-sm md:text-base">
+                            <i class="fas fa-envelope text-purple-500 group-hover:scale-110 transition"></i> thesocialpattarai@gmail.com
+                        </a>
+                        <div class="flex items-center gap-4 text-gray-500 text-sm md:text-base">
+                            <i class="fas fa-map-marker-alt text-purple-900"></i> Mayiladuthurai, Tamil Nadu
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reveal-text glass p-6 md:p-10 rounded-3xl border border-white/5 h-fit">
+                    <form id="contact-form" class="space-y-6">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <input type="text" placeholder="First Name" class="w-full p-4 rounded-xl text-sm" required>
+                            <input type="text" placeholder="Last Name" class="w-full p-4 rounded-xl text-sm" required>
+                        </div>
+                        <input type="email" placeholder="Email Address" class="w-full p-4 rounded-xl text-sm" required>
+                        <input type="text" placeholder="Brand / Niche" class="w-full p-4 rounded-xl text-sm">
+                        <textarea placeholder="Tell us about your goals..." rows="4" class="w-full p-4 rounded-xl text-sm" required></textarea>
+                        <button type="submit" class="btn-premium w-full py-4 text-white font-bold rounded-xl text-sm md:text-base">
+                            Submit Growth Request
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Happy Success Slogan -->
+    <div class="py-12 md:py-20 flex justify-center items-center overflow-hidden">
+        <h2 class="slogan-fit reveal-text">Happy Success</h2>
+    </div>
+
+    <!-- Footer -->
+    <footer class="py-12 px-6 border-t border-white/5 text-center text-gray-500 text-[10px] md:text-sm">
+        <div class="text-purple-500 font-black mb-4 tracking-tighter uppercase text-sm md:text-base">The Social Pattarai</div>
+        <p>© 2025 The Social Pattarai. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let mouse = { x: null, y: null };
+
+        function init() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            particles = [];
+            // Adjust particle count for performance on smaller devices
+            const particleCount = window.innerWidth < 768 ? 40 : 70;
+            for (let i = 0; i < particleCount; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 2 + 0.5,
+                    baseX: 0, baseY: 0,
+                    density: Math.random() * 30 + 1,
+                    color: `rgba(168, 85, 247, ${Math.random() * 0.3})`
+                });
+            }
+            particles.forEach(p => { p.baseX = p.x; p.baseY = p.y; });
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                let dx = mouse.x - p.x;
+                let dy = mouse.y - p.y;
+                let dist = Math.hypot(dx, dy);
+                if (dist < 180) {
+                    p.x -= (dx/dist) * 4;
+                    p.y -= (dy/dist) * 4;
+                } else {
+                    p.x += (p.baseX - p.x) * 0.1;
+                    p.y += (p.baseY - p.y) * 0.1;
+                }
+                ctx.fillStyle = p.color;
+                ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI*2); ctx.fill();
+            });
+            requestAnimationFrame(animate);
+        }
+
+        // --- Count Up Animation ---
+        function animateCountUp() {
+            const counters = document.querySelectorAll('.count-up');
+            const speed = 200;
+
+            counters.forEach(counter => {
+                const updateCount = () => {
+                    const target = +counter.getAttribute('data-target');
+                    const count = +counter.innerText;
+                    const inc = target / speed;
+
+                    if (count < target) {
+                        counter.innerText = Math.ceil(count + inc);
+                        setTimeout(updateCount, 15);
+                    } else {
+                        counter.innerText = target;
+                    }
+                };
+                updateCount();
+            });
+        }
+
+        // --- Navigation ---
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('active');
+            document.body.classList.toggle('overflow-hidden');
+        }
+
+        // Portfolio Video Toggle Logic
+        async function toggleVideo(card) {
+            const video = card.querySelector('video');
+            const overlay = card.querySelector('.play-overlay');
+            
+            if (!video || video.style.display === 'none') return;
+
+            if (video.paused) {
+                // Pause all other videos first
+                document.querySelectorAll('video').forEach(v => {
+                    v.pause();
+                    const vOverlay = v.closest('.video-card').querySelector('.play-overlay');
+                    if (vOverlay) vOverlay.classList.remove('hidden');
+                });
+                
+                try {
+                    await video.play();
+                    overlay.classList.add('hidden');
+                } catch (err) {
+                    console.log("Playback failed: ", err.message);
+                }
+            } else {
+                video.pause();
+                overlay.classList.remove('hidden');
+            }
+        }
+
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX; mouse.y = e.clientY;
+            const cursor = document.getElementById('cursor');
+            if(cursor) cursor.style.transform = `translate3d(${e.clientX - 10}px, ${e.clientY - 10}px, 0)`;
+        });
+
+        window.onload = () => { 
+            init(); 
+            animate(); 
+            document.querySelectorAll('.reveal-text').forEach(el => el.classList.add('active')); 
+            setTimeout(animateCountUp, 500);
+        };
+        
+        window.addEventListener('resize', () => {
+            init();
+        });
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal-text').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
