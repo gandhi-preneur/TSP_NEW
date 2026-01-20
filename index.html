@@ -64,6 +64,14 @@
             box-shadow: 0 10px 30px rgba(168, 85, 247, 0.2);
         }
 
+        /* Mobile/Tablet: Always show purple stroke for Expertise and Advantage sections */
+        @media (max-width: 1023px) {
+            #services .glass,
+            #advantage .glass {
+                border-color: var(--accent);
+            }
+        }
+
         /* Standout Buttons with Subtle Glow */
         .btn-premium {
             background: var(--accent-gradient);
@@ -368,7 +376,7 @@
     </section>
 
     <!-- Why Choose Us (The Advantage) -->
-    <section class="py-20 md:py-32 px-6 max-w-7xl mx-auto">
+    <section id="advantage" class="py-20 md:py-32 px-6 max-w-7xl mx-auto">
         <div class="text-center mb-12 md:mb-16">
             <h2 class="reveal-text text-3xl md:text-4xl font-bold mb-4">The <span class="text-purple-500">Pattarai</span> Advantage</h2>
         </div>
@@ -564,5 +572,4 @@
         document.querySelectorAll('.reveal-text').forEach(el => observer.observe(el));
     </script>
 </body>
-
 </html>
