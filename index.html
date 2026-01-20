@@ -15,8 +15,8 @@
             if (!container) return;
             video.style.display = 'none';
             const msg = document.createElement('div');
-            msg.className = 'absolute inset-0 flex items-center justify-center text-[10px] text-gray-400 px-4 text-center';
-            msg.innerHTML = `Video failed to load. Check your connection.`;
+            msg.className = 'absolute inset-0 flex items-center justify-center text-[10px] text-gray-600 px-4 text-center';
+            msg.innerHTML = `Video source "${video.getAttribute('src')}" not found locally.`;
             container.appendChild(msg);
         }
     </script>
@@ -315,7 +315,7 @@
             <p class="reveal-text text-sm md:text-base text-gray-400">Cinematic content that builds trust and drives growth.</p>
         </div>
         <div class="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-8">
-            <!-- Video Portfolio Items - Updated with Cloudinary Links -->
+            <!-- Video Portfolio Items -->
             <div class="reveal-text video-card glass group" onclick="toggleVideo(this)">
                 <video src="https://res.cloudinary.com/dadzvwbi6/video/upload/v1768847212/video_01_bkiivv.mp4" loop muted playsinline onerror="handleVideoError(this)"></video>
                 <div class="play-overlay">
@@ -329,7 +329,7 @@
                 </div>
             </div>
             <div class="reveal-text video-card glass group" onclick="toggleVideo(this)">
-                <video src="https://res.cloudinary.com/dadzvwbi6/video/upload/v1768847220/video_03_wgk1wa.mp4" loop muted playsinline onerror="handleVideoError(this)"></video>
+                <video src="https://res.cloudinary.com/dadzvwbi6/video/upload/v1768847211/video_05_qyuxrh.mp4" loop muted playsinline onerror="handleVideoError(this)"></video>
                 <div class="play-overlay">
                     <i class="fas fa-play text-purple-500 text-xl md:text-3xl"></i>
                 </div>
@@ -341,7 +341,7 @@
                 </div>
             </div>
             <div class="reveal-text video-card glass group" onclick="toggleVideo(this)">
-                <video src="https://res.cloudinary.com/dadzvwbi6/video/upload/v1768847211/video_05_qyuxrh.mp4" loop muted playsinline onerror="handleVideoError(this)"></video>
+                <video src="https://res.cloudinary.com/dadzvwbi6/video/upload/v1768847220/video_03_wgk1wa.mp4" loop muted playsinline onerror="handleVideoError(this)"></video>
                 <div class="play-overlay">
                     <i class="fas fa-play text-purple-500 text-xl md:text-3xl"></i>
                 </div>
@@ -457,7 +457,7 @@
                         </div>
                         <input type="email" name="email" placeholder="Email Address" class="w-full p-4 rounded-xl text-sm" required>
                         
-                        <!-- Contact Number Field -->
+                        <!-- Requested Contact Number Field -->
                         <input type="number" name="contact_number" placeholder="Contact Number" class="w-full p-4 rounded-xl text-sm" required>
                         
                         <input type="text" name="brand_niche" placeholder="Brand / Niche" class="w-full p-4 rounded-xl text-sm">
