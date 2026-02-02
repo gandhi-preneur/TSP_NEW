@@ -28,8 +28,8 @@
             --accent: #a855f7; /* Electric Purple */
             --accent-gradient: linear-gradient(135deg, #a855f7 0%, #6366f1 100%);
             --bg-dark: #050505;
-            /* Enhanced glass background */
-            --card-bg: rgba(255, 255, 255, 0.05); 
+            /* Ultra-Deep Glass effect */
+            --card-bg: rgba(255, 255, 255, 0.04); 
             --whatsapp: #25D366;
         }
 
@@ -52,20 +52,21 @@
             background: radial-gradient(circle at center, #0f0a1a 0%, #000 100%);
         }
 
-        /* Enhanced Glassmorphism effect */
+        /* Ultra-Enhanced Glassmorphism */
         .glass {
             background: var(--card-bg);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            backdrop-filter: blur(25px) saturate(200%);
+            -webkit-backdrop-filter: blur(25px) saturate(200%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.5);
         }
 
         .glass:hover {
-            border-color: var(--accent);
-            transform: translateY(-5px);
-            box-shadow: 0 10px 40px rgba(168, 85, 247, 0.25);
+            border-color: rgba(168, 85, 247, 0.5);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(168, 85, 247, 0.2);
+            background: rgba(255, 255, 255, 0.06);
         }
 
         /* Mobile/Tablet: Always show purple stroke for Expertise and Advantage sections */
@@ -76,23 +77,21 @@
             }
         }
 
-        /* Standout Buttons with Subtle Glow */
         .btn-premium {
             background: var(--accent-gradient);
             transition: all 0.3s ease;
             position: relative;
-            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.1);
+            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.2);
             display: inline-block;
             text-align: center;
         }
 
         .btn-premium:hover {
             transform: translateY(-2px);
-            box-shadow: 0 0 25px rgba(168, 85, 247, 0.5);
+            box-shadow: 0 0 30px rgba(168, 85, 247, 0.6);
             filter: brightness(1.1);
         }
 
-        /* Whatsapp Button with Green Glow */
         .btn-whatsapp {
             background-color: var(--whatsapp);
             transition: all 0.3s ease;
@@ -102,10 +101,8 @@
         .btn-whatsapp:hover {
             transform: translateY(-2px);
             box-shadow: 0 0 25px rgba(37, 211, 102, 0.7);
-            filter: brightness(1.05);
         }
 
-        /* Text reveal animations */
         .reveal-text {
             opacity: 0;
             transform: translateY(40px);
@@ -121,7 +118,6 @@
             text-shadow: 0 0 25px rgba(168, 85, 247, 0.5);
         }
 
-        /* Nav Interactions */
         .nav-link {
             position: relative;
             padding-bottom: 4px;
@@ -171,11 +167,6 @@
             transition: border-color 0.3s;
         }
 
-        input:focus, textarea:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 10px rgba(168, 85, 247, 0.2);
-        }
-
         .video-card {
             aspect-ratio: 9/16;
             overflow: hidden;
@@ -189,6 +180,8 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+            /* Ensures thumbnail displays from start */
+            background: #000;
         }
 
         .play-overlay {
@@ -197,7 +190,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(2px);
             transition: opacity 0.3s ease;
             z-index: 10;
         }
@@ -220,19 +214,12 @@
             text-align: center;
         }
 
-        /* Mobile Menu Transitions */
         #mobile-menu {
             transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
             transform: translateX(100%);
         }
         #mobile-menu.active {
             transform: translateX(0);
-        }
-
-        /* Form Feedback */
-        #form-status {
-            display: none;
-            animation: fadeIn 0.5s ease forwards;
         }
     </style>
 </head>
@@ -247,7 +234,6 @@
             THE SOCIAL <span class="text-white font-light">PATTARAI</span>
         </div>
         
-        <!-- Desktop Nav -->
         <div class="hidden md:flex space-x-8 text-sm font-medium items-center">
             <a href="#home" class="nav-link">Home</a>
             <a href="#portfolio" class="nav-link">Portfolio</a>
@@ -255,13 +241,11 @@
             <a href="#contact" class="btn-premium px-6 py-2.5 text-white rounded-full font-bold">Contact Us</a>
         </div>
 
-        <!-- Mobile Toggle -->
         <button onclick="toggleMobileMenu()" class="md:hidden text-white text-2xl focus:outline-none">
             <i class="fas fa-bars"></i>
         </button>
     </nav>
 
-    <!-- Mobile Menu Overlay -->
     <div id="mobile-menu" class="fixed inset-0 z-[60] bg-black/95 backdrop-blur-2xl flex flex-col items-center justify-center space-y-8 text-2xl font-bold">
         <button onclick="toggleMobileMenu()" class="absolute top-6 right-6 text-white text-3xl">
             <i class="fas fa-times"></i>
@@ -285,7 +269,7 @@
                 We forge high-impact identities for founders and leaders who want to command authority without sacrificing their time.
             </p>
 
-            <!-- Achievement Stats Row: Grid for strict single-line alignment on mobile -->
+            <!-- Achievement Stats Row -->
             <div class="reveal-text grid grid-cols-3 gap-2 sm:gap-6 md:gap-24 mb-12 max-w-4xl mx-auto" style="transition-delay: 0.3s;">
                 <div class="stat-card text-center">
                     <div class="text-xl sm:text-2xl md:text-4xl font-extrabold text-white"><span class="count-up" data-target="15">0</span>+</div>
@@ -316,41 +300,42 @@
         </div>
 
         <!-- Podcast Style Sub-section -->
-        <div class="mb-12">
+        <div class="mb-20">
             <h3 class="reveal-text text-xl md:text-2xl font-bold mb-8 text-purple-400/80 border-l-2 border-purple-500 pl-4">Podcast Style</h3>
             <div class="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-8">
+                <!-- Direct Cloudinary Links (Note: Removed 'muted' from tags to allow audio on play) -->
                 <div class="reveal-text video-card glass group" onclick="toggleVideo(this)">
-                    <video src="https://res.cloudinary.com/dadzvwbi6/video/upload/v1770011497/video_01_xkfbjg.mp4" loop muted playsinline onerror="handleVideoError(this)"></video>
+                    <video src="https://res.cloudinary.com/dadzvwbi6/video/upload/v1768847212/video_01_bkiivv.mp4" loop playsinline preload="metadata" onerror="handleVideoError(this)"></video>
                     <div class="play-overlay">
                         <i class="fas fa-play text-purple-500 text-xl md:text-3xl"></i>
                     </div>
                 </div>
                 <div class="reveal-text video-card glass group" onclick="toggleVideo(this)">
-                    <video src="https://res.cloudinary.com/dadzvwbi6/video/upload/v1768847213/video_02_rvdw8q.mp4" loop muted playsinline onerror="handleVideoError(this)"></video>
+                    <video src="https://res.cloudinary.com/dadzvwbi6/video/upload/v1768847213/video_02_rvdw8q.mp4" loop playsinline preload="metadata" onerror="handleVideoError(this)"></video>
                     <div class="play-overlay">
                         <i class="fas fa-play text-purple-500 text-xl md:text-3xl"></i>
                     </div>
                 </div>
                 <div class="reveal-text video-card glass group" onclick="toggleVideo(this)">
-                    <video src="https://res.cloudinary.com/dadzvwbi6/video/upload/v1768847220/video_03_wgk1wa.mp4" loop muted playsinline onerror="handleVideoError(this)"></video>
+                    <video src="https://res.cloudinary.com/dadzvwbi6/video/upload/v1768847220/video_03_wgk1wa.mp4" loop playsinline preload="metadata" onerror="handleVideoError(this)"></video>
                     <div class="play-overlay">
                         <i class="fas fa-play text-purple-500 text-xl md:text-3xl"></i>
                     </div>
                 </div>
                 <div class="reveal-text video-card glass group" onclick="toggleVideo(this)">
-                    <video src="https://res.cloudinary.com/dadzvwbi6/video/upload/v1768847216/video_04_clgib3.mp4" loop muted playsinline onerror="handleVideoError(this)"></video>
+                    <video src="https://res.cloudinary.com/dadzvwbi6/video/upload/v1768847216/video_04_clgib3.mp4" loop playsinline preload="metadata" onerror="handleVideoError(this)"></video>
                     <div class="play-overlay">
                         <i class="fas fa-play text-purple-500 text-xl md:text-3xl"></i>
                     </div>
                 </div>
                 <div class="reveal-text video-card glass group" onclick="toggleVideo(this)">
-                    <video src="https://res.cloudinary.com/dadzvwbi6/video/upload/v1770011759/video_05_n9lrko.mp4" loop muted playsinline onerror="handleVideoError(this)"></video>
+                    <video src="https://res.cloudinary.com/dadzvwbi6/video/upload/v1768847211/video_05_qyuxrh.mp4" loop playsinline preload="metadata" onerror="handleVideoError(this)"></video>
                     <div class="play-overlay">
                         <i class="fas fa-play text-purple-500 text-xl md:text-3xl"></i>
                     </div>
                 </div>
                 <div class="reveal-text video-card glass group" onclick="toggleVideo(this)">
-                    <video src="https://res.cloudinary.com/dadzvwbi6/video/upload/v1768847219/video_06_oh5mym.mp4" loop muted playsinline onerror="handleVideoError(this)"></video>
+                    <video src="https://res.cloudinary.com/dadzvwbi6/video/upload/v1768847219/video_06_oh5mym.mp4" loop playsinline preload="metadata" onerror="handleVideoError(this)"></video>
                     <div class="play-overlay">
                         <i class="fas fa-play text-purple-500 text-xl md:text-3xl"></i>
                     </div>
@@ -359,28 +344,30 @@
         </div>
 
         <!-- Montage Cuts Sub-section -->
-        <div class="mt-20">
+        <div>
             <h3 class="reveal-text text-xl md:text-2xl font-bold mb-8 text-purple-400/80 border-l-2 border-purple-500 pl-4">Montage Cuts</h3>
             <div class="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-8">
-                <!-- Montage Placeholders -->
+                <!-- Using one of the existing links as a high-quality dummy video for thumbnails -->
                 <div class="reveal-text video-card glass group" onclick="toggleVideo(this)">
-                    <video src="https://res.cloudinary.com/dadzvwbi6/video/upload/v1770012049/MONTAGE_02_qhg3ar.mp4" loop muted playsinline onerror="handleVideoError(this)"></video>
+                    <video src="https://res.cloudinary.com/dadzvwbi6/video/upload/v1768847212/video_01_bkiivv.mp4" loop playsinline preload="metadata" onerror="handleVideoError(this)"></video>
                     <div class="play-overlay">
-                        <i class="fas fa-film text-purple-500 text-xl md:text-3xl"></i>
+                        <i class="fas fa-play text-purple-500 text-xl md:text-3xl"></i>
                     </div>
-                    <div class="absolute bottom-4 left-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest opacity-40">Coming Soon</div>
+                    <div class="absolute bottom-4 left-4 text-[9px] font-bold text-white/40 uppercase tracking-widest z-20">Sample Edit</div>
                 </div>
                 <div class="reveal-text video-card glass group" onclick="toggleVideo(this)">
+                    <video src="https://res.cloudinary.com/dadzvwbi6/video/upload/v1768847213/video_02_rvdw8q.mp4" loop playsinline preload="metadata" onerror="handleVideoError(this)"></video>
                     <div class="play-overlay">
-                        <i class="fas fa-film text-purple-500 text-xl md:text-3xl"></i>
+                        <i class="fas fa-play text-purple-500 text-xl md:text-3xl"></i>
                     </div>
-                    <div class="absolute bottom-4 left-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest opacity-40">Coming Soon</div>
+                    <div class="absolute bottom-4 left-4 text-[9px] font-bold text-white/40 uppercase tracking-widest z-20">Sample Edit</div>
                 </div>
                 <div class="reveal-text video-card glass group" onclick="toggleVideo(this)">
+                    <video src="https://res.cloudinary.com/dadzvwbi6/video/upload/v1768847220/video_03_wgk1wa.mp4" loop playsinline preload="metadata" onerror="handleVideoError(this)"></video>
                     <div class="play-overlay">
-                        <i class="fas fa-film text-purple-500 text-xl md:text-3xl"></i>
+                        <i class="fas fa-play text-purple-500 text-xl md:text-3xl"></i>
                     </div>
-                    <div class="absolute bottom-4 left-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest opacity-40">Coming Soon</div>
+                    <div class="absolute bottom-4 left-4 text-[9px] font-bold text-white/40 uppercase tracking-widest z-20">Sample Edit</div>
                 </div>
             </div>
         </div>
@@ -429,7 +416,7 @@
         </div>
     </section>
 
-    <!-- Why Choose Us (The Advantage) -->
+    <!-- Why Choose Us -->
     <section id="advantage" class="py-20 md:py-32 px-6 max-w-7xl mx-auto">
         <div class="text-center mb-12 md:mb-16">
             <h2 class="reveal-text text-3xl md:text-4xl font-bold mb-4">The <span class="text-purple-500">Pattarai</span> Advantage</h2>
@@ -462,11 +449,9 @@
                     <p class="reveal-text text-sm md:text-base text-gray-400 mb-10">Mayilduthurai's first dedicated Personal Branding company. Let's discuss how we can scale your influence together.</p>
                     
                     <div class="reveal-text space-y-6 mb-12 flex flex-col items-center lg:items-start">
-                        <!-- WhatsApp Button -->
                         <a href="https://wa.me/919791808992" target="_blank" class="btn-whatsapp flex items-center justify-center gap-3 px-8 py-3.5 rounded-xl text-black font-bold text-sm md:text-base w-fit min-w-[200px] mb-2">
                             <i class="fab fa-whatsapp text-xl"></i> Whatsapp us
                         </a>
-
                         <a href="tel:+919791808992" class="flex items-center gap-4 hover:text-purple-400 transition group text-sm md:text-base min-w-[200px] justify-center lg:justify-start">
                             <i class="fas fa-phone-alt text-purple-500 group-hover:scale-110 transition"></i> +91 9791808992
                         </a>
@@ -480,7 +465,6 @@
                 </div>
 
                 <div class="reveal-text glass p-6 md:p-10 rounded-3xl border border-white/5 h-fit">
-                    <!-- Formspree Endpoint -->
                     <form id="contact-form" action="https://formspree.io/f/mojjnyjb" method="POST" class="space-y-6">
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <input type="text" name="first_name" placeholder="First Name" class="w-full p-4 rounded-xl text-sm" required>
@@ -490,12 +474,9 @@
                         <input type="number" name="contact_number" placeholder="Contact Number" class="w-full p-4 rounded-xl text-sm" required>
                         <input type="text" name="brand_niche" placeholder="Brand / Niche" class="w-full p-4 rounded-xl text-sm">
                         <textarea name="message" placeholder="Tell us about your goals..." rows="4" class="w-full p-4 rounded-xl text-sm" required></textarea>
-                        
                         <button type="submit" id="submit-btn" class="btn-premium w-full py-4 text-white font-bold rounded-xl text-sm md:text-base">
                             Submit Growth Request
                         </button>
-
-                        <!-- Success/Error Message -->
                         <div id="form-status" class="text-center p-4 rounded-xl font-bold"></div>
                     </form>
                 </div>
@@ -503,7 +484,7 @@
         </div>
     </section>
 
-    <!-- Happy Success Slogan -->
+    <!-- Slogan -->
     <div class="py-12 md:py-20 flex justify-center items-center overflow-hidden">
         <h2 class="slogan-fit reveal-text">Happy Success</h2>
     </div>
@@ -524,7 +505,7 @@
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
             particles = [];
-            const particleCount = window.innerWidth < 768 ? 40 : 70;
+            const particleCount = window.innerWidth < 768 ? 35 : 65;
             for (let i = 0; i < particleCount; i++) {
                 particles.push({
                     x: Math.random() * canvas.width,
@@ -532,7 +513,7 @@
                     size: Math.random() * 2 + 0.5,
                     baseX: 0, baseY: 0,
                     density: Math.random() * 30 + 1,
-                    color: `rgba(168, 85, 247, ${Math.random() * 0.3})`
+                    color: `rgba(168, 85, 247, ${Math.random() * 0.25})`
                 });
             }
             particles.forEach(p => { p.baseX = p.x; p.baseY = p.y; });
@@ -557,7 +538,7 @@
             requestAnimationFrame(animate);
         }
 
-        // --- Form Handling Logic ---
+        // --- Form Handling ---
         const contactForm = document.getElementById('contact-form');
         const formStatus = document.getElementById('form-status');
         const submitBtn = document.getElementById('submit-btn');
@@ -566,7 +547,6 @@
             e.preventDefault();
             submitBtn.disabled = true;
             submitBtn.innerText = "Sending...";
-            formStatus.style.display = "none";
             const formData = new FormData(contactForm);
             try {
                 const response = await fetch(contactForm.action, {
@@ -576,30 +556,27 @@
                 });
                 if (response.ok) {
                     formStatus.innerText = "Success! We'll contact you soon.";
-                    formStatus.className = "text-green-400 bg-green-400/10 p-4 rounded-xl font-bold mt-4";
-                    formStatus.style.display = "block";
+                    formStatus.className = "text-green-400 bg-green-400/10 p-4 rounded-xl font-bold mt-4 block";
                     contactForm.reset();
-                    submitBtn.innerText = "Growth Request Sent";
+                    submitBtn.innerText = "Request Sent";
                 } else throw new Error();
             } catch (error) {
-                formStatus.innerText = "Oops! There was a problem. Try again.";
-                formStatus.className = "text-red-400 bg-red-400/10 p-4 rounded-xl font-bold mt-4";
-                formStatus.style.display = "block";
+                formStatus.innerText = "Error. Please try again.";
+                formStatus.className = "text-red-400 bg-red-400/10 p-4 rounded-xl font-bold mt-4 block";
                 submitBtn.disabled = false;
                 submitBtn.innerText = "Submit Growth Request";
             }
         });
 
-        // --- Count Up Animation ---
         function animateCountUp() {
             document.querySelectorAll('.count-up').forEach(counter => {
                 const updateCount = () => {
                     const target = +counter.getAttribute('data-target');
                     const count = +counter.innerText;
-                    const inc = target / 200;
+                    const inc = target / 150;
                     if (count < target) {
                         counter.innerText = Math.ceil(count + inc);
-                        setTimeout(updateCount, 15);
+                        setTimeout(updateCount, 20);
                     } else counter.innerText = target;
                 };
                 updateCount();
@@ -611,17 +588,23 @@
             document.body.classList.toggle('overflow-hidden');
         }
 
+        // --- Video Logic with Audio & Unmute ---
         async function toggleVideo(card) {
             const video = card.querySelector('video');
             const overlay = card.querySelector('.play-overlay');
             if (!video || video.style.display === 'none') return;
+
             if (video.paused) {
+                // Pause others
                 document.querySelectorAll('video').forEach(v => {
                     v.pause();
                     const vOverlay = v.closest('.video-card').querySelector('.play-overlay');
                     if (vOverlay) vOverlay.classList.remove('hidden');
                 });
+                
                 try {
+                    // Critical: Unmute on play to ensure audio works on user click
+                    video.muted = false; 
                     await video.play();
                     overlay.classList.add('hidden');
                 } catch (err) { console.log(err.message); }
@@ -651,6 +634,3 @@
     </script>
 </body>
 </html>
-
-
-
